@@ -73,13 +73,13 @@ Obs. You can skip that part and direct download the datasets used in this experi
 
 For full documentation on serving this Semantic Segmentation CNN, refer to [How to deploy TensorFlow models to production using TF Serving](https://sthalles.github.io/serving_tensorflow_models/).
 
-All the serving scripts are placed inside: ```./serving/```.
+All the serving scripts are placed inside: ```./serving```.
 
 To export the model and to perform client requests do the following:
 
 1. Create a python3 virtual environment and install the dependencies from the ```serving_requirements.txt``` file;
 
-2. Using the python3 env, run ```deeplab_saved_model.py```. The exported model should reside into ```./serving/model/```;
+2. Using the python3 env, run ```deeplab_saved_model.py```. The exported model should reside into ```./serving/versions```;
 
 3. Create a python2 virtual environment and install the dependencies from the ```client_requirements.txt``` file;
 

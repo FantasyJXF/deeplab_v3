@@ -1,0 +1,10 @@
+
+__pycache__/
+resnet/__pycache__/
+serving/.ipynb_checkpoints/
+serving/nohup.out
+serving/tboard_logs/16645/
+serving/versions/
+tboard_logs.zip
+resnet_serving/__pycache__/
+resnet_serving/resnet/
