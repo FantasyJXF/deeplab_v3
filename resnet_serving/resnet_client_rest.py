@@ -6,7 +6,7 @@
 # Author: jingxiaofei
 # Contact: <jingxiaofei@kkworld.com>
 # 
-# Last Modified: Thursday September 19th 2019 9:18:49 pm
+# Last Modified: Friday September 20th 2019 5:16:18 pm
 # 
 # Copyright (c) 2019 KKWorld
 # It is never too late to be what you might have been.
@@ -53,6 +53,11 @@ def main():
   dl_request.raise_for_status()
 
   # Compose a JSON Predict request (send JPEG image in base64).
+  # According to https://www.tensorflow.org/tfx/serving/api_rest
+  # JSON uses UTF-8 encoding. If you have input feature or tensor values that need to be binary 
+  # (like image bytes), you must Base64 encode the data and encapsulate it in a JSON object 
+  # having b64 as the key as follows:
+  # { "b64": <base64 encoded string> }
   jpeg_bytes = base64.b64encode(dl_request.content).decode('utf-8')
   predict_request = '{"instances" : [{"b64": "%s"}]}' % jpeg_bytes
 
