@@ -1,4 +1,5 @@
-
+.vscode
+serving/serve
 __pycache__/
 resnet/__pycache__/
 serving/.ipynb_checkpoints/

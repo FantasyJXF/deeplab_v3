@@ -5,7 +5,7 @@
 # Author: jingxiaofei
 # Contact: <jingxiaofei@kkworld.com>
 # 
-# Last Modified: Friday September 20th 2019 4:56:20 pm
+# Last Modified: Tuesday September 24th 2019 10:07:06 am
 # 
 # Copyright (c) 2019 KKWorld
 # It is never too late to be what you might have been.
@@ -16,6 +16,7 @@
 ###
 
 from __future__ import print_function
+import os
 from PIL import Image
 from grpc.beta import implementations
 import tensorflow as tf
@@ -24,9 +25,10 @@ from tensorflow_serving.apis import prediction_service_pb2
 import requests
 import numpy as np
 from StringIO import StringIO
+from io import BytesIO
 import argparse
-import cv2 
-from PIL import Image
+import cv2
+
 
 parser = argparse.ArgumentParser(description='incetion grpc client flags.')
 parser.add_argument('--host', default='0.0.0.0', help='inception serving host')
@@ -34,7 +36,7 @@ parser.add_argument('--port', default='8500', help='inception serving port')
 parser.add_argument('--image', default='/Users/jingxiaofei/Desktop/Images/girl.jpg', help='path to JPEG image file')
 FLAGS = parser.parse_args()
 
-def main():  
+def main():
 
     # create request
     request = predict_pb2.PredictRequest()
@@ -42,7 +44,15 @@ def main():
     request.model_spec.signature_name = 'predict_images'
 
     # read image into numpy array
-    image = np.array(Image.open(FLAGS.image))
+    if FLAGS.image.startswith('http'):
+        response = requests.get(FLAGS.image)
+        image = np.array(Image.open(BytesIO(response.content)))
+        response.raise_for_status()
+    elif os.path.exists(FLAGS.image):
+        image = np.array(Image.open(FLAGS.image))
+    else:
+        print("File doesn't exists")
+        raise Exception("No such file or url")
     height, width = image.shape[0:2]
 
     # fill in the request object with the necessary data
@@ -66,7 +76,7 @@ def main():
     for color in colors:
         if color > 0:
             image_mask[image_mask==color] = 255
-    cv2.imwrite('b.png', image_mask)
+    cv2.imwrite('dog666.png', image_mask)
     
 if __name__ == '__main__':
     main()

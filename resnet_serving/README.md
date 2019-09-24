@@ -20,6 +20,9 @@ Breaking down the command line arguments, we are:
 
 ### 查看模型的输入输出
 很多时候我们需要查看模型的输出和输出参数的具体形式，TensorFlow提供了一个`saved_model_cli`命令来查看模型的输入和输出参数：
+
+> 这里的`dir`需要是具体到版本号的模型路径
+
 ```
 $ saved_model_cli show --dir /tmp/resnet/1538687457/ --all
 

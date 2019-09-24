@@ -6,7 +6,7 @@
 # Author: jingxiaofei
 # Contact: <jingxiaofei@kkworld.com>
 # 
-# Last Modified: Friday September 20th 2019 6:10:25 pm
+# Last Modified: Monday September 23rd 2019 3:26:00 pm
 # 
 # Copyright (c) 2019 KKWorld
 # It is never too late to be what you might have been.
@@ -52,7 +52,6 @@ def main(_):
         dl_request.raise_for_status()
         data = dl_request.content
 
-    #channel = grpc.insecure_channel(FLAGS.server)
     channel = implementations.insecure_channel(FLAGS.host, int(FLAGS.port))
     stub = prediction_service_pb2.beta_create_PredictionService_stub(channel)
     # Send request
