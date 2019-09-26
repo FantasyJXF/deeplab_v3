@@ -89,6 +89,7 @@ with graph.as_default():
     
 # Then, we feed the tensor to the model and save its output.
 with graph.as_default():
+    # print('input_tensor.shape:', input_tensor.shape, input_tensor.dtype)
     # Get style transferred tensor
     logits_tf = network.deeplab_v3(input_tensor, args, is_training=False, reuse=False)
 
@@ -100,12 +101,14 @@ with graph.as_default():
     # Convert to uint8 tensor
     output_tensor = tf.image.convert_image_dtype(predictions_tf, tf.uint8)
 
+    # print('output_tensor.shape: ', output_tensor.shape)
+    # print('output_tensor.dtype: ', output_tensor.dtype)
     # Remove the batch dimension
     output_tensor = tf.squeeze(output_tensor, [0])
     
-    output_tensor = tf.stack([output_tensor,output_tensor,output_tensor],2)
-
-    #print('final output shape ', output_tensor.dtype)
+    output_tensor = tf.stack([output_tensor,output_tensor,output_tensor], 2)
+    # print('final output shape ', output_tensor.shape)
+    # print('final output dtype ', output_tensor.dtype)
     # Transform uint8 tensor to bitstring
     output_bytes = tf.image.encode_png(output_tensor)
     output_bytes = tf.identity(output_bytes, name="output_bytes")

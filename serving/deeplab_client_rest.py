@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 ###
 # File: deeplab_client_rest.py
@@ -28,7 +27,7 @@ import ipdb
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--in-path", default='http://img.ewebweb.com/uploads/20190403/14/1554274318-AZHxeCFcIK.jpeg', help="Input Image.")
+    parser.add_argument("--in-path", default='/Users/jingxiaofei/Desktop/Images/000129.jpg', help="Input Image.")
     parser.add_argument("--out-path", default='b.jpg', help="Output Image.")
     parser.add_argument("--host", default="0.0.0.0", help="Host address.")
     parser.add_argument("--port", default="8501", help="RESTful API port.")
