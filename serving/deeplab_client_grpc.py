@@ -76,7 +76,7 @@ def main():
     for color in colors:
         if color > 0:
             image_mask[image_mask==color] = 255
-    cv2.imwrite('dog666.png', image_mask)
+    cv2.imwrite('girl666.png', image_mask)
     
 if __name__ == '__main__':
     main()

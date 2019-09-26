@@ -6,7 +6,7 @@
 # Author: jingxiaofei
 # Contact: <jingxiaofei@kkworld.com>
 # 
-# Last Modified: Tuesday September 24th 2019 12:18:25 pm
+# Last Modified: Thursday September 26th 2019 6:34:34 pm
 # 
 # Copyright (c) 2019 KKWorld
 # It is never too late to be what you might have been.
@@ -74,17 +74,15 @@ with graph.as_default():
     
     # Transform bitstring to uint8 tensor
     input_tensor = tf.image.decode_png(input_bytes, channels=3)
-    
-    # Convert to float32 tensor
-    input_tensor = tf.image.convert_image_dtype(input_tensor, dtype=tf.float32)
-    
+
     # CycleGAN's inference function accepts a batch of images
     # So expand the single tensor into a batch of 1
     input_tensor = tf.expand_dims(input_tensor, 0)
-    
+
+    print('input_tensor .shape is ', input_tensor.shape)
     # Ensure tensor has correct shape
-    # input_tensor = tf.image.resize_bilinear(
-    #    input_tensor, [615, 407], align_corners=False)
+    input_tensor = tf.image.resize_bilinear(
+       input_tensor, [513, 513], align_corners=False)
       #input_tensor, [FLAGS.image_size, FLAGS.image_size], align_corners=False)
     
 # Then, we feed the tensor to the model and save its output.
@@ -98,11 +96,8 @@ with graph.as_default():
 
 with graph.as_default():
     
-    # Convert to uint8 tensor
-    output_tensor = tf.image.convert_image_dtype(predictions_tf, tf.uint8)
+    output_tensor = tf.cast(predictions_tf, tf.uint8)
 
-    # print('output_tensor.shape: ', output_tensor.shape)
-    # print('output_tensor.dtype: ', output_tensor.dtype)
     # Remove the batch dimension
     output_tensor = tf.squeeze(output_tensor, [0])
     
