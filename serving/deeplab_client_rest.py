@@ -5,7 +5,7 @@
 # Author: jingxiaofei
 # Contact: <jingxiaofei@kkworld.com>
 # 
-# Last Modified: Tuesday September 24th 2019 12:23:19 pm
+# Last Modified: Friday September 27th 2019 10:19:42 am
 # 
 # Copyright (c) 2019 KKWorld
 # It is never too late to be what you might have been.
@@ -22,13 +22,16 @@ import base64
 import requests
 import json
 import argparse
+import numpy as np
+import utils
+import cv2 as cv
 import ipdb
 
 def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--in-path", default='/Users/jingxiaofei/Desktop/Images/000129.jpg', help="Input Image.")
-    parser.add_argument("--out-path", default='b.jpg', help="Output Image.")
+    parser.add_argument("--out-path", default='', help="Output Image.")
     parser.add_argument("--host", default="0.0.0.0", help="Host address.")
     parser.add_argument("--port", default="8501", help="RESTful API port.")
     parser.add_argument("--model", default="deeplab", help="Serving model.")
@@ -73,11 +76,16 @@ def main(args):
 
     # Decode bitstring
     encoded_response_string = response_string.encode("utf-8")
-    response_image = base64.b64decode(encoded_response_string)
+    image_bitstring = base64.b64decode(encoded_response_string)
 
-    # Save inferred image
-    with open(args.out_path, "wb") as output_file:
-        output_file.write(response_image)
+    img_np = np.frombuffer(image_bitstring, dtype=np.uint8)
+    img_np = cv.imdecode(img_np, flags=1)[:,:,0]
+    img_bgr = utils.decode_segmap(img_np)
+    cv.imwrite(args.out_path, img_bgr)
+    
+    #Save inferred image
+    # with open(args.out_path, "wb") as output_file:
+    #     output_file.write(image_bitstring)
 
 if __name__ == '__main__':
     args = parse_args()

@@ -6,7 +6,7 @@
 # Author: jingxiaofei
 # Contact: <jingxiaofei@kkworld.com>
 # 
-# Last Modified: Thursday September 26th 2019 6:34:34 pm
+# Last Modified: Thursday September 26th 2019 10:20:55 pm
 # 
 # Copyright (c) 2019 KKWorld
 # It is never too late to be what you might have been.
@@ -25,6 +25,7 @@ import sys
 import shutil
 sys.path.insert(0, "../")
 import network
+import utils
 import json
 import ipdb
 
@@ -54,56 +55,53 @@ class Dotdict(dict):
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
 
-
 args = Dotdict(args)
 
 graph = tf.Graph()
 
-# Here, we instantiate a CycleGAN and inject our first layer.
+# Here, we instantiate a Model and inject our first layer.
 with graph.as_default():
-    # Instantiate a CycleGAN
-    #cycle_gan = model.CycleGAN(ngf=FLAGS.ngf, norm=FLAGS.norm, image_size=FLAGS.image_size)
 
     # Create placeholder for image bitstring
     # This is the injection of the input bitstring layer
     input_bytes = tf.placeholder(tf.string, shape=[], name="input_bytes")
     
-# Next, we preprocess the bitstring to a float tensor batch so it can be used in the model.
+# Next, we preprocess the bitstring to a tensor batch so it can be used in the model.
 with graph.as_default(): 
     input_bytes = tf.reshape(input_bytes, [])
     
     # Transform bitstring to uint8 tensor
     input_tensor = tf.image.decode_png(input_bytes, channels=3)
 
-    # CycleGAN's inference function accepts a batch of images
+    input_tensor = tf.cast(input_tensor, tf.float32)
+
+    # Model's inference function accepts a batch of images
     # So expand the single tensor into a batch of 1
     input_tensor = tf.expand_dims(input_tensor, 0)
 
-    print('input_tensor .shape is ', input_tensor.shape)
-    # Ensure tensor has correct shape
-    input_tensor = tf.image.resize_bilinear(
-       input_tensor, [513, 513], align_corners=False)
-      #input_tensor, [FLAGS.image_size, FLAGS.image_size], align_corners=False)
+    # Resize the input tensor to a tertain size
+    #input_tensor = tf.image.resize_bilinear(
+    #   input_tensor, [FLAGS.image_size, FLAGS.image_size], align_corners=False)
     
 # Then, we feed the tensor to the model and save its output.
 with graph.as_default():
-    # print('input_tensor.shape:', input_tensor.shape, input_tensor.dtype)
-    # Get style transferred tensor
+    # Get model predictions
     logits_tf = network.deeplab_v3(input_tensor, args, is_training=False, reuse=False)
 
-    # extract the segmentation mask
-    predictions_tf = tf.argmax(logits_tf, axis=3)
+    # extract the segmentation classes, each value refer to a class
+    predictions_tf = tf.argmax(logits_tf, axis=3) # int64
 
 with graph.as_default():
-    
+    # Cast the output to uint8
     output_tensor = tf.cast(predictions_tf, tf.uint8)
 
     # Remove the batch dimension
-    output_tensor = tf.squeeze(output_tensor, [0])
+    output_tensor = tf.squeeze(output_tensor, 0)
     
-    output_tensor = tf.stack([output_tensor,output_tensor,output_tensor], 2)
-    # print('final output shape ', output_tensor.shape)
-    # print('final output dtype ', output_tensor.dtype)
+    ## Stack the tensor to (?, ?, 3) for image encoding
+    #output_tensor = tf.stack([output_tensor,output_tensor,output_tensor], 2)
+    output_tensor = tf.expand_dims(output_tensor, -1)
+    
     # Transform uint8 tensor to bitstring
     output_bytes = tf.image.encode_png(output_tensor)
     output_bytes = tf.identity(output_bytes, name="output_bytes")

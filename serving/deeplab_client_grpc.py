@@ -5,7 +5,7 @@
 # Author: jingxiaofei
 # Contact: <jingxiaofei@kkworld.com>
 # 
-# Last Modified: Tuesday September 24th 2019 10:07:06 am
+# Last Modified: Friday September 27th 2019 10:19:29 am
 # 
 # Copyright (c) 2019 KKWorld
 # It is never too late to be what you might have been.
@@ -33,7 +33,7 @@ import cv2
 parser = argparse.ArgumentParser(description='incetion grpc client flags.')
 parser.add_argument('--host', default='0.0.0.0', help='inception serving host')
 parser.add_argument('--port', default='8500', help='inception serving port')
-parser.add_argument('--image', default='/Users/jingxiaofei/Desktop/Images/girl.jpg', help='path to JPEG image file')
+parser.add_argument('--image', default='', help='path to JPEG image file')
 FLAGS = parser.parse_args()
 
 def main():
