@@ -32,8 +32,9 @@ import cv2
 
 parser = argparse.ArgumentParser(description='incetion grpc client flags.')
 parser.add_argument('--host', default='0.0.0.0', help='inception serving host')
-parser.add_argument('--port', default='8500', help='inception serving port')
+parser.add_argument('--port', default='9000', help='inception serving port')
 parser.add_argument('--image', default='', help='path to JPEG image file')
+parser.add_argument('--output', default='', help='path to output JPEG image file')
 FLAGS = parser.parse_args()
 
 def main():

@@ -30,11 +30,11 @@ import ipdb
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--in-path", default='/Users/jingxiaofei/Desktop/Images/000129.jpg', help="Input Image.")
-    parser.add_argument("--out-path", default='', help="Output Image.")
+    parser.add_argument("--in-path", default='https://img.gq.com.tw/_rs/645/userfiles/sm/sm1024_images_A1/40721/2019092061159601.jpg', help="Input Image.")
+    parser.add_argument("--out-path", default='lol.jpg', help="Output Image.")
     parser.add_argument("--host", default="0.0.0.0", help="Host address.")
-    parser.add_argument("--port", default="8501", help="RESTful API port.")
-    parser.add_argument("--model", default="deeplab", help="Serving model.")
+    parser.add_argument("--port", default="9001", help="RESTful API port.")
+    parser.add_argument("--model", default="deeplab_v1", help="Serving model.")
     args = parser.parse_args()
     return args
 
